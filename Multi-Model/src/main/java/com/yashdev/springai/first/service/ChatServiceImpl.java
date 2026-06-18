@@ -63,7 +63,7 @@ public class ChatServiceImpl implements ChatService {
         return Response;
     }
 
-    public String chatTemplate() {
+    public String chatTemplate(String query) {
 
 
         //first step
@@ -100,7 +100,7 @@ public class ChatServiceImpl implements ChatService {
                 .system(system ->
                         system.text(this.systemMessage))
                 .user(user ->
-                        user.text(this.userMessage).param("concept", "Python iteration"))
+                        user.text(this.userMessage).param("concept", query))
                 .call()
                 .content()
                 ;

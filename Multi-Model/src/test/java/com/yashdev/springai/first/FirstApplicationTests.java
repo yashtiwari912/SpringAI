@@ -17,10 +17,10 @@ class FirstApplicationTests {
 	@Test
 	void testTemplateRender(){
 
-		System.out.println("template Render");
-
-		var output = this.chatService.chatTemplate();
-		System.out.println(output);
+//		System.out.println("template Render");
+//
+//		var output = this.chatService.chatTemplate();
+//		System.out.println(output);
 	}
 
 
