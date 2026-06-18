@@ -2,6 +2,7 @@ package com.yashdev.springai.first.service;
 
 import com.yashdev.springai.first.config.AiConfig;
 import com.yashdev.springai.first.entity.Blog;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,11 +10,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 
 @Service
+@Slf4j
 public class ChatServiceImpl implements ChatService {
 
     @Autowired
@@ -104,5 +108,17 @@ public class ChatServiceImpl implements ChatService {
                 .call()
                 .content()
                 ;
+    }
+
+    @Override
+    public Flux<String> streamChat(String query) {
+        return this.aiConfig.googleChatClient()
+                .prompt()
+                .system(system -> system.text(this.systemMessage))
+                .user(user -> user.text(this.userMessage).param("concept", query))
+                .stream()
+                .content()
+                .doOnNext(chunk -> log.info("Chunk received at: {}", Instant.now()));
+
     }
 }
