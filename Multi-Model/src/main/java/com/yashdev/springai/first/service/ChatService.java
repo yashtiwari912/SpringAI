@@ -5,5 +5,6 @@ import com.yashdev.springai.first.entity.Blog;
 import java.util.List;
 
 public interface ChatService {
-        List<Blog> chat(String query);
+        String chat(String query);
+        String chatTemplate();
 }

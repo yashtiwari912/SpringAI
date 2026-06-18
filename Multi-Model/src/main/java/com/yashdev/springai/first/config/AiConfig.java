@@ -3,6 +3,8 @@ package com.yashdev.springai.first.config;
 import org.springframework.ai.chat.client.ChatClient;
 //import org.springframework.ai.google.genai.GoogleGenAiChatModel;
 //import org.springframework.ai.ollama.OllamaChatModel;
+import org.springframework.ai.google.genai.GoogleGenAiChatModel;
+import org.springframework.ai.google.genai.GoogleGenAiChatOptions;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -22,7 +24,13 @@ public class AiConfig {
     private ChatClient chatClient;
 
     public AiConfig(ChatClient.Builder builder) {
-        this.chatClient = builder.build();
+        this.chatClient = builder.defaultOptions(
+                GoogleGenAiChatOptions.builder()
+                        .model("gemini-2.5-flash")
+                        .temperature(0.7)
+
+                )
+                .build();
     }
 
     @Bean

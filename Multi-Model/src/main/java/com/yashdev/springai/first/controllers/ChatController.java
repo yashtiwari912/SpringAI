@@ -33,7 +33,7 @@ public class ChatController {
     private ChatServiceImpl chatService;
 
     @GetMapping("/chat")
-    public ResponseEntity<List<Blog>>chat(@RequestParam(value = "q",required = true) String query){
+    public ResponseEntity<String> chat(@RequestParam(value = "q",required = true) String query){
 
         return ResponseEntity.ok(chatService.chat(query));
     }
