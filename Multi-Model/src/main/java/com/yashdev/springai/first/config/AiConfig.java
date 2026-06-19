@@ -4,9 +4,10 @@ import com.yashdev.springai.first.advisors.TokenPrintAdvisor;
 import org.springframework.ai.chat.client.ChatClient;
 //import org.springframework.ai.google.genai.GoogleGenAiChatModel;
 //import org.springframework.ai.ollama.OllamaChatModel;
+//import org.springframework.ai.google.genai.GoogleGenAiChatModel;
+//import org.springframework.ai.google.genai.GoogleGenAiChatOptions;
+import org.springframework.ai.ollama.api.OllamaChatOptions;
 import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
-import org.springframework.ai.google.genai.GoogleGenAiChatModel;
-import org.springframework.ai.google.genai.GoogleGenAiChatOptions;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -29,8 +30,8 @@ public class AiConfig {
         this.chatClient = builder.
                 defaultAdvisors(new TokenPrintAdvisor(),new SimpleLoggerAdvisor()).
                 defaultOptions(
-                GoogleGenAiChatOptions.builder()
-                        .model("gemini-2.5-flash")
+                OllamaChatOptions.builder()
+                        .model("phi4-mini:3.8b")
                         .temperature(0.7)
 
 
@@ -38,8 +39,9 @@ public class AiConfig {
                 .build();
     }
 
+
     @Bean
-    public ChatClient googleChatClient() {
+    public ChatClient ollamaChatClient() {
         return this.chatClient;
     }
 }

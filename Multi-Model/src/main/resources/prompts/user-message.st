@@ -1,1 +1,1 @@
-Explain the concept of {concept}.
+Now answer the user query accordingly {Input}.

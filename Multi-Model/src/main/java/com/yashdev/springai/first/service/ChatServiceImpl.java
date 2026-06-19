@@ -58,7 +58,7 @@ public class ChatServiceImpl implements ChatService {
 
         //Test for dynamic query
         String testQuery = "Act as an expert Coding Assistant and write programms in java for the following query: {query}";
-        String Response = aiConfig.googleChatClient()
+        String Response = aiConfig.ollamaChatClient()
                 .prompt()
                 .user(u -> u.text(testQuery).param("query", query))
                 .call()
@@ -99,12 +99,12 @@ public class ChatServiceImpl implements ChatService {
 //        Prompt prompt = new Prompt(systemMessage,userMessage);
 
 
-        return this.aiConfig.googleChatClient()
+        return this.aiConfig.ollamaChatClient()
                 .prompt()
                 .system(system ->
                         system.text(this.systemMessage))
                 .user(user ->
-                        user.text(this.userMessage).param("concept", query))
+                        user.text(this.userMessage).param("Input", query))
                 .call()
                 .content()
                 ;
@@ -112,10 +112,10 @@ public class ChatServiceImpl implements ChatService {
 
     @Override
     public Flux<String> streamChat(String query) {
-        return this.aiConfig.googleChatClient()
+        return this.aiConfig.ollamaChatClient()
                 .prompt()
                 .system(system -> system.text(this.systemMessage))
-                .user(user -> user.text(this.userMessage).param("concept", query))
+                .user(user -> user.text(this.userMessage).param("Input", query))
                 .stream()
                 .content()
                 .doOnNext(chunk -> log.info("Chunk received at: {}", Instant.now()));
