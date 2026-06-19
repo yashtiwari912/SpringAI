@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface ChatService {
         String chat(String query);
-        String chatTemplate(String query);
+        String chatTemplate(String query,String userId);
 
         Flux<String> streamChat(String query);
 }

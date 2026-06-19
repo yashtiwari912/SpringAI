@@ -68,7 +68,7 @@ public class ChatServiceImpl implements ChatService {
         return Response;
     }
 
-    public String chatTemplate(String query) {
+    public String chatTemplate(String query,String userId) {
 
 
         //first step
@@ -104,7 +104,7 @@ public class ChatServiceImpl implements ChatService {
                 .prompt()
                 .advisors(a -> a.param(
                         ChatMemory.CONVERSATION_ID,
-                        "my-test-conversation"))
+                        userId))
                 .system(system ->
                         system.text(this.systemMessage))
                 .user(user ->
