@@ -3,6 +3,7 @@ package com.yashdev.springai.first.service;
 import com.yashdev.springai.first.config.AiConfig;
 import com.yashdev.springai.first.entity.Blog;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -101,6 +102,9 @@ public class ChatServiceImpl implements ChatService {
 
         return this.aiConfig.ollamaChatClient()
                 .prompt()
+                .advisors(a -> a.param(
+                        ChatMemory.CONVERSATION_ID,
+                        "my-test-conversation"))
                 .system(system ->
                         system.text(this.systemMessage))
                 .user(user ->

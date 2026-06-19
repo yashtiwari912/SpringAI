@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping
@@ -36,7 +37,7 @@ public class ChatController {
     @GetMapping("/chat")
     public ResponseEntity<String> chat(@RequestParam(value = "q",required = true) String query){
 
-        return ResponseEntity.ok(chatService.chatTemplate(query));
+            return ResponseEntity.ok(chatService.chatTemplate(query));
     }
     @GetMapping("/stream-chat")
     public Flux<String>streamChat(
