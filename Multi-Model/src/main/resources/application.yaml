@@ -1,6 +1,11 @@
 spring:
   application:
     name: first
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      auto-index-creation: true
   ai:
     chat:
 #      client:
