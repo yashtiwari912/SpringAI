@@ -1,0 +1,1 @@
+Now answer the user query accordingly {Input}.

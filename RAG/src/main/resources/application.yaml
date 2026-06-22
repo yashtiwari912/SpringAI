@@ -1,0 +1,42 @@
+spring:
+  application:
+    name: first
+  data:
+    mongodb:
+      uri: ${ATLAS_DB}
+      auto-index-creation: true
+      database: springai
+  ai:
+    vectorstore:
+      mongodb:
+        initialize-schema: false
+        collection-name: springaitest
+    chat:
+      client:
+        enabled: true
+    google:
+      genai:
+        api-key: ${GOOGLE_API_KEY}
+        chat:
+            options:
+                model: gemini-2.5-flash
+                temperature: 0.7
+        embedding:
+          api-key: ${GOOGLE_API_KEY}
+          text:
+            model: gemini-embedding-001
+#    ollama:
+#      base-url: http://localhost:11434
+#      chat:
+#        options:
+#          model: phi4-mini:3.8b
+#          temperature: 0.7
+
+logging:
+  level:
+      org:
+        springframework:
+          ai:
+            chat:
+              client:
+                advisor: DEBUG
