@@ -2,6 +2,8 @@ package com.yashdev.springai.first.service;
 
 import com.yashdev.springai.first.config.AiConfig;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
+import org.springframework.ai.chat.client.advisor.vectorstore.QuestionAnswerAdvisor;
 import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.document.Document;
@@ -9,6 +11,7 @@ import org.springframework.ai.vectorstore.SearchRequest;
 import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.Ordered;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
@@ -103,27 +106,34 @@ public class ChatServiceImpl implements ChatService {
 
         //Load Data from Vector Db
 
-        SearchRequest searchRequest = SearchRequest.builder()
-                .topK(5)
-                .similarityThreshold(0.6)
-                .query(query)
-                .build();
-
-        List<Document> document = this.vectorStore.similaritySearch(searchRequest);
-        List<String> documentList = document.stream().map(Document::getText).toList();
-        String contextData = String.join(", ", documentList);
-
-        log.info("Context Data: {}",contextData);
+//        SearchRequest searchRequest = SearchRequest.builder()
+//                .topK(5)
+//                .similarityThreshold(0.6)
+//                .query(query)
+//                .build();
+//
+//        List<Document> document = this.vectorStore.similaritySearch(searchRequest);
+//        List<String> documentList = document.stream().map(Document::getText).toList();
+//        String contextData = String.join(", ", documentList);
+//        log.info("Context Data: {}",contextData);
+        // We Can do all this work with simply using QuestionAnswerAdvisor
 
         return this.aiConfig.googleChatClient()
                 .prompt()
 //                .advisors(a -> a.param(
 //                        ChatMemory.CONVERSATION_ID,
 //                        userId))
-                .system(system ->
-                        system.text(this.systemMessage).param("documents",contextData))
+//                .system(system ->
+//                        system.text(this.systemMessage).param("documents",contextData))
+                .advisors(QuestionAnswerAdvisor.builder(vectorStore)
+                        .searchRequest(SearchRequest.builder()
+                                .topK(5)
+                                .similarityThreshold(0.6)
+                                .build())
+                        .order(Ordered.HIGHEST_PRECEDENCE)  // runs first
+                        .build())
                 .user(user ->
-                        user.text(this.userMessage).param("query", query))
+                        user.text(query))
                 .call()
                 .content()
                 ;
