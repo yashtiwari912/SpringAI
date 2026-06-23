@@ -38,10 +38,10 @@ public class AiConfig {
         //Implemeting ChatMemory
         log.info("ChatMemory Implementation Class: "+ chatMemory.getClass().getName());
 
-        MessageChatMemoryAdvisor messageChatMemoryAdvisor = MessageChatMemoryAdvisor.builder(chatMemory).build();
+        //MessageChatMemoryAdvisor messageChatMemoryAdvisor = MessageChatMemoryAdvisor.builder(chatMemory).build();
 
         this.chatClient = builder.
-                defaultAdvisors(messageChatMemoryAdvisor,new TokenPrintAdvisor(),new SimpleLoggerAdvisor(),
+                defaultAdvisors(new TokenPrintAdvisor(),new SimpleLoggerAdvisor(),
                         new SafeGuardAdvisor(List.of("games"))
                 ).
                 defaultOptions(

@@ -31,11 +31,17 @@ public class ChatController {
     @Autowired
     private ChatServiceImpl chatService;
 
+//    @GetMapping("/chat")
+//    public ResponseEntity<String> chat(@RequestParam(value = "q",required = true) String query,
+//     @RequestHeader(value="userId",required = true)String userId){
+//
+//            return ResponseEntity.ok(chatService.chatTemplate(query,userId));
+//    }
     @GetMapping("/chat")
-    public ResponseEntity<String> chat(@RequestParam(value = "q",required = true) String query,
-     @RequestHeader(value="userId",required = true)String userId){
+    public ResponseEntity<String> chat(@RequestParam(value = "q",required = true) String query
+                                       ){
 
-            return ResponseEntity.ok(chatService.chatTemplate(query,userId));
+        return ResponseEntity.ok(chatService.chatTemplate(query));
     }
     @GetMapping("/stream-chat")
     public Flux<String>streamChat(

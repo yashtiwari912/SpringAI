@@ -1,1 +1,2 @@
-Now answer the user query accordingly {Input}.
+User query:
+{query}

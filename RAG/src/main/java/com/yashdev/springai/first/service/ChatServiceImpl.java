@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.document.Document;
+import org.springframework.ai.vectorstore.SearchRequest;
 import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -69,7 +70,7 @@ public class ChatServiceImpl implements ChatService {
         return Response;
     }
 
-    public String chatTemplate(String query,String userId) {
+    public String chatTemplate(String query) {
 
 
         //first step
@@ -100,16 +101,29 @@ public class ChatServiceImpl implements ChatService {
 
 //        Prompt prompt = new Prompt(systemMessage,userMessage);
 
+        //Load Data from Vector Db
+
+        SearchRequest searchRequest = SearchRequest.builder()
+                .topK(5)
+                .similarityThreshold(0.6)
+                .query(query)
+                .build();
+
+        List<Document> document = this.vectorStore.similaritySearch(searchRequest);
+        List<String> documentList = document.stream().map(Document::getText).toList();
+        String contextData = String.join(", ", documentList);
+
+        log.info("Context Data: {}",contextData);
 
         return this.aiConfig.googleChatClient()
                 .prompt()
-                .advisors(a -> a.param(
-                        ChatMemory.CONVERSATION_ID,
-                        userId))
+//                .advisors(a -> a.param(
+//                        ChatMemory.CONVERSATION_ID,
+//                        userId))
                 .system(system ->
-                        system.text(this.systemMessage))
+                        system.text(this.systemMessage).param("documents",contextData))
                 .user(user ->
-                        user.text(this.userMessage).param("Input", query))
+                        user.text(this.userMessage).param("query", query))
                 .call()
                 .content()
                 ;
